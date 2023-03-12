@@ -146,7 +146,7 @@ class MeasureProcess(tk.Frame):
                 
                 arr = value.copy()
                 for x in value:
-                    gi = (x - avg) / sig
+                    gi = abs(x - avg) / sig
                     if gi > g0:
                         self.answer.insert('insert', f'当前 gi 为 {gi}，剔除异常数据{x}\n')
                         arr.remove(x)
@@ -159,7 +159,7 @@ class MeasureProcess(tk.Frame):
             ua = sig / math.sqrt(n)
             u = math.sqrt(ua ** 2 + ub ** 2)
             v = float('%.1g'%u)
-            u = v if v > u else v + 10 ** math.floor(math.log10(v))
+            u = v if v > u else float('%.1g'%(v + 10 ** math.floor(math.log10(v))))
             avg = round(avg, -math.floor(math.log10(u)))
             self.answer.insert('insert', f'测量结果为{avg}±{u}')
             
@@ -193,7 +193,7 @@ PS：
 由于某些原因，请自行将最后结果转化为科学计数法
 并保留适量的末尾 0
 PS2：
-常数请自行选择合适的保留位数填入（尽量多，如 2.000000）'''
+常数请自行选择合适的保留位数填入（尽量多，如 3.1415926）'''
     
     def __init__(self, master):
         super().__init__(master)
@@ -320,7 +320,8 @@ PS2：
                                 f = 1
                             else:
                                 f, r= -1, -r
-                            l = len(x.r) - 2
+                            l = len(str(r)) - 2
+                            l = max(l, 10)
                             p = math.floor(math.log10(r)) if r != 0 else 0
                             r /= 10 ** p
                             r = round(r, l)
@@ -344,6 +345,7 @@ PS2：
                             p += self.p + x.p
                             r = round(r, l)
                             r = f'%.{l}f'%r
+                            print('*', self.r, x.r, r, l, p)
                             return Num(r, p, f)
                         else:
                             r = x
@@ -351,7 +353,8 @@ PS2：
                                 f = 1
                             else:
                                 f, r= -1, -r
-                            l = len(x.r) - 2
+                            l = len(str(r)) - 2
+                            l = max(l, 10)
                             p = math.floor(math.log10(r)) if r != 0 else 0
                             r /= 10 ** p
                             r = round(r, l)
@@ -368,6 +371,7 @@ PS2：
                             p += self.p - x.p
                             r = round(r, l)
                             r = f'%.{l}f'%r
+                            print('/', self.r, x.r, r, l, p)
                             return Num(r, p, f)
                         else:
                             r = x
@@ -375,7 +379,8 @@ PS2：
                                 f = 1
                             else:
                                 f, r= -1, -r
-                            l = len(x.r) - 2
+                            l = len(str(r)) - 2
+                            l = max(l, 10)
                             p = math.floor(math.log10(r)) if r != 0 else 0
                             r /= 10 ** p
                             r = round(r, l)
@@ -408,7 +413,8 @@ PS2：
                                 f = 1
                             else:
                                 f, r= -1, -r
-                            l = len(x.r) - 2
+                            l = len(str(r)) - 2
+                            l = max(l, 10)
                             p = math.floor(math.log10(r)) if r != 0 else 0
                             r /= 10 ** p
                             r = round(r, l)
@@ -499,7 +505,7 @@ PS2：
                               ((getval(d.grad) * float(self.value_input.get_value[3][2]()) * (10 ** float(self.value_input.get_value[3][3]()))) ** 2) +
                               ((getval(e.grad) * float(self.value_input.get_value[4][2]()) * (10 ** float(self.value_input.get_value[4][3]()))) ** 2) )
                 v = float('%.1g'%u)
-                u = v if v > u else v + 10 ** math.floor(math.log10(v))
+                u = v if v > u else float('%.1g'%(v + 10 ** math.floor(math.log10(v))))
                 return u
             u = error_process()
             
